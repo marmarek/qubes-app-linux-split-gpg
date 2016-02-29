@@ -1,4 +1,16 @@
-#!/bin/sh
+#!/bin/bash
+
+declare -a args
+while [ $# -gt 0 ]; do
+    case "$1" in
+        # Keyserver options makes no sense for offline GPG VM, so it is
+        # rejected by gpg-split. But since it is forced by Torbirdy extension,
+        # simply ignore the option.
+        --keyserver-options) shift ;;
+        *) args=( "${args[@]}" "$1" ) ;;
+    esac
+    shift
+done
 
 . /etc/profile.d/qubes-gpg.sh
-exec qubes-gpg-client "$@"
+exec qubes-gpg-client "${args[@]}"
